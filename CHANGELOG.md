@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/clique-it-tech/vault-plugin-secrets-litellm/compare/v1.0.0...v1.0.1) (2026-11-04)
+
+
+### Bug Fixes
+
+* bump vulnerable dependencies and scan with govulncheck ([#3](https://github.com/clique-it-tech/vault-plugin-secrets-litellm/issues/3)) ([fe08190](https://github.com/clique-it-tech/vault-plugin-secrets-litellm/commit/fe08190222d22357c9b797953c29761c010f6e56))
+
 ## 1.0.0 (2026-08-25)
 
 
