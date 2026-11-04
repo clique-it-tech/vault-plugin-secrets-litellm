@@ -194,22 +194,10 @@ moment, so a leftover can be recognised from the proxy side.
 
 ## Releases
 
-A release carries the `linux/amd64` binary, its `SHA256SUMS`, and
-`SHA256SUMS.sigstore.json`, a keyless Sigstore signature of the checksums made by
-the release workflow with its GitHub OIDC identity. Check both before
-registering the plugin:
-
-```bash
-cosign verify-blob --bundle SHA256SUMS.sigstore.json \
-  --certificate-identity https://github.com/clique-it-tech/vault-plugin-secrets-litellm/.github/workflows/release.yml@refs/heads/main \
-  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
-  SHA256SUMS
-sha256sum -c SHA256SUMS
-```
-
-Versions and release notes come from the commit messages. Everything runs on
-GitHub's runners, with no key to keep: the signature is bound to this
-repository's release workflow on `main` and logged in Rekor.
+A release carries the `linux/amd64` binary and its `SHA256SUMS`, because that is
+what a Vault server needs to fetch and verify. Versions and release notes come
+from the commit messages, and the build is attached in the same run, using only
+the token GitHub gives the workflow.
 
 ## Authorship
 

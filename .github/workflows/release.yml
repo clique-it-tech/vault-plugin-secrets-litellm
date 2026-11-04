@@ -7,14 +7,10 @@ on:
 permissions:
   contents: write
   pull-requests: write
-  id-token: write
 
 jobs:
   release:
     runs-on: ubuntu-latest
-    outputs:
-      created: ${{ steps.rp.outputs.release_created }}
-      tag: ${{ steps.rp.outputs.tag_name }}
     steps:
       - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
         id: rp
@@ -30,10 +26,7 @@ jobs:
           go-version-file: go.mod
           cache: true
 
-      - uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
-        if: steps.rp.outputs.release_created == 'true'
-
-      - name: Build, sign and attach the plugin
+      - name: Build and attach the plugin
         if: steps.rp.outputs.release_created == 'true'
         run: |
           mkdir -p dist
@@ -41,9 +34,7 @@ jobs:
             -o dist/vault-plugin-secrets-litellm-linux-amd64 ./cmd/vault-plugin-secrets-litellm
           cd dist
           sha256sum vault-plugin-secrets-litellm-linux-amd64 > SHA256SUMS
-          cosign sign-blob --yes --bundle SHA256SUMS.sigstore.json SHA256SUMS
-          gh release upload "$TAG" vault-plugin-secrets-litellm-linux-amd64 SHA256SUMS SHA256SUMS.sigstore.json --clobber
+          gh release upload "$TAG" vault-plugin-secrets-litellm-linux-amd64 SHA256SUMS --clobber
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ steps.rp.outputs.tag_name }}
-
